@@ -1,0 +1,11 @@
+{
+    "require-dev": {
+        "laravel/breeze": "^2.0"
+    },
+    "require": {
+        "barryvdh/laravel-dompdf": "*",
+        "maatwebsite/excel": "^3.1"
+    }
+  
+
+}
