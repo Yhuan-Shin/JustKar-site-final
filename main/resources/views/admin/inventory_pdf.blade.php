@@ -3,18 +3,39 @@
 <head>
     <title>Inventory Report</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .header, .footer {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        table, th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .badge {
+            font-size: 0.9em;
+        }
+    </style>
 </head>
-<style>
-table,th, td{
-    border: 1px solid black;   
-    padding: 3px;
- 
-}
-</style>
 <body>
-    <h1>JustKar Inventory Report</h1>
+    <div class="header">
+        <h1>JustKar Inventory Report</h1>
+        <h6>Date: {{ date('d/m/Y') }}</h6>
+
+    </div>
     <table class="table table-bordered">
-        <thead class="table-dark">
+        <thead class="table-dark" style="white-space: nowrap">
             <tr>
                 <th scope="col">Product Code</th>
                 <th scope="col">Product Name</th>
@@ -47,12 +68,11 @@ table,th, td{
                 <td>{{ $item->brand }}</td>
                 <td>{{ $item->size }}</td>
                 <td>{{ $item->description }}</td>
-                <!-- Display more attributes -->
             </tr>
             @endforeach
         </tbody>
     </table>
- 
+   
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </html>

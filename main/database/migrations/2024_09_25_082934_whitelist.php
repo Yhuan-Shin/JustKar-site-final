@@ -14,7 +14,7 @@ return new class extends Migration
         //
         Schema::create('whitelist', function (Blueprint $table) {
             $table->id();
-            $table->string('mac_address');
+            $table->string('ip_address');
             $table->timestamps();
         });
     }

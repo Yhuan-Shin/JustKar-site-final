@@ -1,22 +1,21 @@
 <div>
     <div style="width: 100%; margin: auto;">
         <!-- Canvas element for the Chart.js chart -->
-        <canvas id="salesChart" class="border border-1 p-2 shadow" height="250"></canvas>
+        <canvas id="salesChart" class="border border-1 p-2 shadow" height="250" ></canvas>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
- 
-    
+
     <script>
-            document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {
             var ctx = document.getElementById('salesChart').getContext('2d');
             var categoriesObject = @json($categories);
             
             // Convert categories object into an array of values
             var categories = Object.values(categoriesObject);
-
+    
             var salesData = @json($salesData);
-
+    
             var datasets = Object.keys(salesData).map(function (brand) {
                 return {
                     label: brand,
@@ -28,7 +27,7 @@
                     borderWidth: 1
                 };
             });
-
+    
             var salesChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -47,7 +46,17 @@
                     }
                 }
             });
+    
+            setInterval(function () {
+                let updatedSalesData = @json($salesData);  // Ensure updated sales data is provided here
+                salesChart.data.datasets.forEach((dataset, index) => {
+                    dataset.data = categories.map(function (category) {
+                        return updatedSalesData[dataset.label][category] || 0;
+                    });
+                });
+                salesChart.update();
+            }, 1000);
         });
-
     </script>
+    
 </div>

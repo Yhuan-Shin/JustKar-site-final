@@ -14,7 +14,7 @@
 <body class="bg-light">
     <!-- sidebar -->
         {{-- modal create product --}}
-        @include('components/inventory/inventory_add')
+        {{-- @include('components/inventory/inventory_add') --}}
         {{-- end modal --}}
 
       
@@ -99,7 +99,11 @@
                               
                                 <div class="row align-items-center">
                                     <div class="col-md-12s">
+                                        {{-- index --}}
                                         @livewire('inventory-display')
+                                        @livewire('inventory-update')
+
+
                                     </div>
                                 </div>
                     </div>

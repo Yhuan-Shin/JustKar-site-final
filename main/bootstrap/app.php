@@ -14,7 +14,6 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         //
         \App\Http\Middleware\AdminAuth::class;
-        \App\Http\Middleware\CashierAuth::class;
         \App\Http\Middleware\SuperAdminAuth::class;
         \App\Http\Middleware\WhiteListAuth::class;
     })

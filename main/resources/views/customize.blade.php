@@ -45,24 +45,33 @@
                     <div class="container mb-3">
                         <div class="row justify-content-end">
                           <div class="col-md-6">
-                            <select id="carType" class="form-control w-50 float-end" onchange="changeIframe(this.value)">
-                              <option selected disabled>Select Car Type</option>
-                              <option value="sedan">Sedan</option>
-                              <option value="suv">SUV</option>
-                              <option value="hatchback">Hatchback</option>
-                              <option value="pickup">Pickup</option>
-                            </select>
+                            <div id="alertPlaceholder"></div>
+
+                            <select id="carType" class="form-control w-50 float-end" 
+                            onchange="changeIframe(this.value)" 
+                            onclick="showAlert()">
+                            <option selected disabled>Select Car Type</option>
+                            <option value="sedan">Sedan</option>
+                            <option value="suv">SUV</option>
+                            <option value="hatchback">Hatchback</option>
+                            <option value="pickup">Pickup</option>
+                         </select>
                           </div>
                         </div>
                       </div>
-
-                    <div class="container d-flex justify-content-center">
-                        
+                      <div class="alert alert-info alert-dismissible fade show text-center mt-3" role="alert">
+                        All of the products shown are for visualizing only.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+                      <div class="alert alert-danger alert-dismissible fade show text-center mt-3" role="alert">
+                        Select a car type to customize.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>  <div class="container d-flex justify-content-center">
                         {{-- car --}}
                         <div class="frame-container d-flex justify-content-center">
                           <iframe id="vehicle-image" class="alcar_bb" src="" width="100%" height="500px" scrolling="no"></iframe>
-
                         </div>
+                       
 
                     </div>
                 </div>       
@@ -86,34 +95,7 @@
                 </div>
              </div>
         </div>
-        {{-- <script>
-            function changeIframe(vehicleType) {
-              const iframe = document.getElementById('vehicle-image');
-              const imageList = document.getElementById('image-list');
-              let src = '';
-              let wheelsComponent = '';
 
-              switch(vehicleType) {
-                case 'sedan':
-                  src = 'https://bbimg.alcar-wheels.com/viewer.php?alclcs=2a92444ee73079a6a15b61fb8d7ba0a6&amp;lng=en&amp;dtlcs=Zu4bIeKkeZIFAq5Qk82L7QwgDbqs2oXw&amp;fbld=F1296&amp;rbld=R020-99&amp;zoll=18';
-                  break;
-                case 'suv':
-                  src = 'https://bbimg.alcar-wheels.com/configurator_blackbox/bbviewer.php?alclcs=2a92444ee73079a6a15b61fb8d7ba0a6&lng=en&dtlcs=Zu4bIeKkeZIFAq5Qk82L7QwgDbqs2oXw&fbld=F1910&rbld=R021-150&zoll=20&bck=';
-                  wheelsComponent = '@include('components/wheels/suv')';
-                  break;
-                case 'hatchback':
-                  src = 'https://bbimg.alcar-wheels.com/configurator_blackbox/bbviewer.php?alclcs=2a92444ee73079a6a15b61fb8d7ba0a6&lng=en&dtlcs=Zu4bIeKkeZIFAq5Qk82L7QwgDbqs2oXw&fbld=F1776&rbld=R020-99&zoll=18&bck=';
-                  wheelsComponent = '@include('components/wheels/hatchback')';
-                  break;
-                case 'pickup':
-                  src = 'https://bbimg.alcar-wheels.com/configurator_blackbox/bbviewer.php?alclcs=2a92444ee73079a6a15b61fb8d7ba0a6&lng=en&dtlcs=Zu4bIeKkeZIFAq5Qk82L7QwgDbqs2oXw&fbld=F2046&rbld=R021-150&zoll=20&bck=';
-                  wheelsComponent = '@include('components/wheels/pickup')';
-                  break;
-              }
-              iframe.src = src;
-              imageList.innerHTML = wheelsComponent;              
-            }
-          </script> --}}
           <script>
             function changeIframe(vehicleType) {
                 const iframe = document.getElementById('vehicle-image');
@@ -136,7 +118,7 @@
                         document.getElementById('wheels-suv').style.display = 'block';
                         break;
                     case 'hatchback':
-                        src = 'https://bbimg.alcar-wheels.com/configurator_blackbox/bbviewer.php?alclcs=2a92444ee73079a6a15b61fb8d7ba0a6&lng=en&dtlcs=Zu4bIeKkeZIFAq5Qk82L7QwgDbqs2oXw&fbld=F1776&rbld=R020-99&zoll=18&bck='; // Hatchback URL
+                        src = 'https://bbimg.alcar-wheels.com/configurator_blackbox/bbviewer.php?alclcs=2a92444ee73079a6a15b61fb8d7ba0a6&lng=en&dtlcs=Zu4bIeKkeZIFAq5Qk82L7QwgDbqs2oXw&fbld=F1776&rbld=R021-158&zoll=18&bck='; // Hatchback URL
                         document.getElementById('wheels-hatchback').style.display = 'block';
                         break;
                     case 'pickup':
@@ -152,6 +134,19 @@
         <script src="/script.js"></script>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js
-"></script>  
+"></script>
+<script>
+  function showAlert() {
+      if (window.innerWidth <= 768) {
+          const alertPlaceholder = document.getElementById('alertPlaceholder');
+          const alert = document.createElement('div');
+          alert.className = 'alert alert-warning alert-dismissible fade show';
+          alert.role = 'alert';
+          alert.innerHTML = 'Best used for desktop. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';  
+          alertPlaceholder.appendChild(alert);
+      }
+  }
+  </script>
+  
 </body>
 </html>

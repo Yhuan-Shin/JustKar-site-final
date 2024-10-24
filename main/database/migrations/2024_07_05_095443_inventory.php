@@ -22,6 +22,9 @@ return new class extends Migration
             $table->string('quantity');
             $table->string('status')->nullable(); 
             $table->string('brand');
+            $table->string('critical_level')->nullable();
+            $table->text('description');
+            $table->boolean('archived')->default(false);
             $table->timestamps();
         });
     }

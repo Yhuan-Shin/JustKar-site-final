@@ -24,7 +24,9 @@ class Products extends Model
         'critical_level',
         'product_image',
         'price',
-        'description'
+        'description',
+        'discount',
+        'discount_price',
     ];
     public function inventory(): BelongsTo
     {
@@ -38,9 +40,10 @@ class Products extends Model
     {
         static::updated(function ($product) {
             OrderItem::where('product_id', $product->id)->update([
-                'price' => $product->price,
+                'price' => $product->discount_price,
                 'product_name' => $product->product_name,
-                'size' => $product->size
+                'size' => $product->size,
+                'total_price' => $product->discount_price
             ]);
         });
         //update inventory

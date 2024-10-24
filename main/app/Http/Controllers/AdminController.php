@@ -14,6 +14,7 @@ class AdminController extends Controller
 
     public function index(Request $request)
     {
+        
         $period = $request->input('period') ?? 'this_month';
 
         $data = $this->fetchData($period);

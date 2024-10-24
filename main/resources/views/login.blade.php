@@ -31,7 +31,7 @@
                         <h6 class="text-center text-light text-uppercase">account LOGIN</h6>
                     </div>
                     <div class="card-body text-white">
-                        <form action="{{route('user.login')}}" method="post">
+                        <form action="{{route('login')}}" method="post">
                         @csrf
                         @method('POST')
                             <div class="mb-3">

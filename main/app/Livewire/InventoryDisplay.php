@@ -1,9 +1,14 @@
 <?php
 
 namespace App\Livewire;
+use Illuminate\Database\QueryException;
 use App\Models\Inventory;
 use App\Models\Products;
 use Livewire\Component;
+use App\Models\ProductType;
+use App\Models\Categories;
+
+use Illuminate\Http\Request;
 use Livewire\WithPagination;
 
 class InventoryDisplay extends Component
@@ -15,19 +20,20 @@ class InventoryDisplay extends Component
     public $selectedItems = []; 
     public $selectAll = false;  
     public $archived = false; 
-
+   
     public function mount($filter = null, $search = null, $archived = false)
     {
         $this->filter = $filter;
         $this->search = $search;
-        $this->archived = $archived;
-    }
+        $this->archived = $archived;  
+
+    }  
+ 
     public function refresh()
     {
         $this->render();
-        
     }
-
+ 
     public function updatedSelectAll($value)
     {
         if ($value) {
@@ -53,6 +59,7 @@ class InventoryDisplay extends Component
 
     public function render()
     {
+
         $query = Inventory::query();
         if ($this->archived) {
             $query->where('archived', true);
@@ -65,7 +72,9 @@ class InventoryDisplay extends Component
                 $q->where('product_name', 'like', '%' . $this->search . '%')
                   ->orWhere('product_code', 'like', '%' . $this->search . '%')
                   ->orWhere('brand', 'like', '%' . $this->search . '%')
-                  ->orWhere('category', 'like', '%' . $this->search . '%');
+                  ->orWhere('category', 'like', '%' . $this->search . '%')
+                  ->orWhere('size', 'like', '%' . $this->search . '%');
+
             });
                     //return no results
          if ($query->count() == 0) {

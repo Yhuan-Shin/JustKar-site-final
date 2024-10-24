@@ -11,9 +11,20 @@ class SalesLogsPdf extends Controller
     //
     public function exportToPdf()
     {
-        $sales = Sales::all(); // Fetch all sales
-        $pdf = PDF::loadView('admin/sales_pdf', compact('sales'));
+        $sales = Sales::with('payment')->get(); 
+
+        $options = [
+            'defaultFont' => 'sans-serif', 
+            'isHtml5ParserEnabled' => true, 
+            'isRemoteEnabled' => true, 
+            'paper' => 'A4', 
+            'orientation' => 'landscape' 
+        ];
+        $pdf = PDF::loadView('admin.sales_pdf', compact('sales'))
+                 ->setPaper('A4', 'landscape')
+                 ->setOptions($options);
         return $pdf->download('sales.pdf');
+
     }
 
 }

@@ -5,7 +5,9 @@ use App\Models\WhiteList;
 use Closure;
 use App\Models\SuperAdmin;
 use Illuminate\Http\Request;
+use App\Mail\UnauthorizedAccessMail;
 use App\Notifications\UnauthorizedAccessNotification;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 
 class WhiteListAuth
@@ -26,6 +28,7 @@ class WhiteListAuth
             $superAdmin = SuperAdmin::where('role', 'superadmin')->first();
             if ($superAdmin) {
                 $superAdmin->notify(new UnauthorizedAccessNotification($clientIp));
+                Mail::to($superAdmin->email)->send(new UnauthorizedAccessMail($clientIp));
             }
             return response()->view('errors.error_message', [
                 'ip_address' => $clientIp

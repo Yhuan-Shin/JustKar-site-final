@@ -19,13 +19,21 @@ class InventoryAdd extends Component
     public $size;
     public $description;
     public $inventory;
-    
     public $categories= null;
  
-    
-    public function resetForm()
+    protected $rules = [
+        'product_code' => 'required',
+        'product_name' => 'required',
+        'selectedProduct' => 'required',
+        'selectedCategory' => 'required',
+        'quantity' => 'required',
+        'brand' => 'required',
+        'size' => 'required',
+        'description' => 'required'
+    ];
+
+    public function close()
     {
-        
         $this->reset();
     }
     
@@ -37,6 +45,16 @@ class InventoryAdd extends Component
    
     public function submit()
     {
+        $validatedData = $this->validate([
+            'product_code' => 'required|string|max:6|unique:inventory,product_code',
+            'product_name' => 'required|string|max:50',
+            'selectedProduct' => 'required|exists:product_type,id',
+            'selectedCategory' => 'required|exists:categories,id',
+            'quantity' => 'required|integer|min:1',
+            'brand' => 'required|string|max:16',
+            'size' => 'required|string|max:10',
+            'description' => 'required|string|max:255',
+        ]);
         $data = [
             'product_code' => $this->product_code,
             'product_name' => $this->product_name,
@@ -62,6 +80,8 @@ class InventoryAdd extends Component
                 session()->flash('error', 'Product already exists.');
             }else{
                 $status = ($data['quantity'] > $critical_level) ? 'instock' : 'lowstock';
+               
+
                 $inventory = Inventory::create([
                     'product_code' => $data['product_code'],
                     'product_name' => $data['product_name'],
@@ -73,17 +93,9 @@ class InventoryAdd extends Component
                     'critical_level' => $critical_level,
                     'status' => $status,
                     'description' => $data['description']
-                    
                 ]);
-                // session()->flash('success', 'Item Inserted');
-                $this->product_code = '';
-                $this->product_name = '';
-                $this->selectedProduct = null;
-                $this->selectedCategory = null;
-                $this->quantity = '';
-                $this->brand = '';
-                $this->size = '';
-                $this->description = '';
+                $inventory->save();
+
 
                 Products::create([
                     'inventory_id' => $inventory->id,
@@ -97,6 +109,10 @@ class InventoryAdd extends Component
                     'description' => $inventory->description,
                     'critical_level' => $critical_level,
                 ]);
+                $this->close();
+
+                session()->flash('success', 'Item Inserted');
+                return redirect()->route('inventory.store')->with('success', 'Item Inserted');
 
             }
            
@@ -111,7 +127,11 @@ class InventoryAdd extends Component
             }
         }
     }
-
+    public function refresh()
+    {
+        $this->render();
+        
+    }
     public function render()
     {
         return view('livewire.inventory-add',[

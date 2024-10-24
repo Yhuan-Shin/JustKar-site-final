@@ -62,7 +62,7 @@ class AdminManagement extends Controller
         $admins = User::where('id', $id)->where('role', 'admin')->firstOrFail();
         $admins->update($request->validate([
             'name' => 'required|string',
-            'username' => 'required|string|unique:admin,username,'.$id,
+            'username' => 'required|string|unique:users,username,'.$id,
             'password' => 'required|string|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/'
             ],[
                 'password.regex' => 'The password must contain at least one letter, one number, and one special character.',

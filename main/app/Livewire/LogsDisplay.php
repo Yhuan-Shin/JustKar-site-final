@@ -27,14 +27,22 @@ class LogsDisplay extends Component
     }
     public function render()
     {
-        $sales = Sales::where('ref_no', 'LIKE', '%'.$this->search.'%')
-            ->orWhere('product_name', 'LIKE', '%'.$this->search.'%')
-            ->orWhere('product_type', 'LIKE', '%'.$this->search.'%')
 
-            ->orWhere('quantity', 'LIKE', '%'.$this->search.'%')
-            ->orWhereDate('created_at', '=', date('m-d-Y', strtotime(str_replace('-', '/', $this->search))))
-            ->orWhere('cashier_name', 'LIKE', '%'.$this->search.'%');
-
+        $sales = Sales::with('payment') 
+            ->where('quantity', '>', 0)
+            ->where(function($query) {
+                $query->where('ref_no', 'LIKE', '%'.$this->search.'%')
+                    ->orWhere('transaction_no', 'LIKE', '%'.$this->search.'%')
+                    ->orWhere('product_code', 'LIKE', '%'.$this->search.'%')
+                    ->orWhere('product_name', 'LIKE', '%'.$this->search.'%')
+                    ->orWhere('product_type', 'LIKE', '%'.$this->search.'%')
+                    ->orWhere('brand', 'LIKE', '%'.$this->search.'%')
+                    ->orWhere('invoice_no', 'LIKE', '%'.$this->search.'%')
+                    ->orWhere('quantity', 'LIKE', '%'.$this->search.'%')
+                    ->orWhereDate('created_at', '=', date('m-d-Y', strtotime(str_replace('-', '/', $this->search))))
+                    ->orWhere('cashier_name', 'LIKE', '%'.$this->search.'%');
+            });
+    
         switch ($this->filter) {
             case 'recent':
                 $sales->orderBy('created_at', 'desc');
@@ -57,18 +65,22 @@ class LogsDisplay extends Component
                     ]
                 );
                 break;
-
+    
             default:
-                # code...
                 break;
         }
+        
         $sales = $sales->paginate(10);
+    
+        // if ($sales->count() == 0) {
+        //     session()->flash('warning', 'No results found. Please enter a valid search term.');
+        // }  
+    
+        return view('livewire.logs-display', ['sales' => $sales,
+        
+    ]);
 
-        if ($sales->count() == 0) {
-            session()->flash('warning', 'No results found. Please enter a valid search term.');
-        }  
-     
-        return view('livewire.logs-display' , ['sales' => $sales, ]);
     }
+    
 
 }

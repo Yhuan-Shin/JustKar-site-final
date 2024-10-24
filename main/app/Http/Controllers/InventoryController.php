@@ -25,11 +25,7 @@ class InventoryController extends Controller
     }
 
    protected $criticalLevel;
-   public function edit(string $id): View
-    {   
-        $inventory = Inventory::find($id);
-        return view('inventory.edit')->with('item', $inventory);
-    }
+
     public function update(Request $request, string $id)
 {
     try {

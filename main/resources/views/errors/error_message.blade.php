@@ -10,8 +10,8 @@
     <div style="text-align: center; margin-top: 50px;">
         <img src="{{ asset('images/warning.png') }}" alt="" width="100px" height="100px">
         <h1>Unauthorized Access</h1>
-        <p>Your IP address <strong>{{ $ip_address }}</strong> is not authorized to access this page.</p>
-        <p>Please contact the administrator if you believe this is a mistake.</p>
+        <p>Your are not authorized to access this page.</p>
+        <p>Please contact the superadmin if you believe this is a mistake.</p>
     </div>
 </body>
 </html>

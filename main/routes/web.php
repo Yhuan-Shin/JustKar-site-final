@@ -19,9 +19,12 @@ use App\Http\Controllers\UserLogin;
 use App\Http\Controllers\WhiteListController;
 use App\Http\Middleware\SuperAdminAuth;
 use App\Http\Middleware\WhiteListAuth;
+use App\Http\Middleware\CheckLogin;
 use App\Livewire\InventoryArchive;
 use App\Models\SuperAdmin;
 use App\Http\Controllers\PieChart;
+use App\Http\Controllers\RefundController;
+use App\Models\Admin;
 
 //superadmin
 Route::get('/superadmin', function () {
@@ -44,14 +47,13 @@ Route::middleware([WhiteListAuth::class])->group(function() {
     Route::get('/login', function () {
         return view('login');
     }); 
-    Route::post('/login', [UserLogin::class, 'login'])->name('user.login') ;
+    Route::post('/login', [UserLogin::class, 'login'])->name('login') ;
     Route::get('/logout', [UserLogin::class, 'logout'])->name('user.logout');
     
     Route::middleware(['auth:admin'])->group(function() {
         // Admin Dashboard
-        Route::get('/admin/dashboard', [AdminController::class, 'index'], function () {
-            return view('admin/admin-home');
-        });
+        Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard')->middleware([AdminAuth::class]);
+
         
         // Products Management
         Route::get('/admin/products', [ProductsController::class, 'display'])->name('products.display');
@@ -86,7 +88,10 @@ Route::middleware([WhiteListAuth::class])->group(function() {
         Route::put('/admin/inventory', [InventoryController::class, 'setCriticalLevel'])->name('inventory.critical');
         Route::get('/inventory/export-pdf', [InventoryPdfController::class, 'exportToPdf'])->name('inventory.export');
         Route::get('/inventory/export-excel', [InventoryController::class, 'exportToExcel'])->name('inventory.exportToExcel');
-    
+        
+        // refund
+        Route::get('/admin/refund', [RefundController::class, 'display'])->name('refund.display');
+        Route::post('/admin/refund', [RefundController::class, 'refund'])->name('refund.store');
     
     });
 

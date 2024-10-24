@@ -11,7 +11,10 @@ class Sales extends Model
     protected $table = 'sales';
     protected $fillable = [
         'inventory_id',
+        'payment_id',
+        'transaction_no',
         'ref_no',
+        'invoice_no',
         'product_code',
         'product_name',
         'product_type',
@@ -29,5 +32,16 @@ class Sales extends Model
     }
     //update inventory quantity
    
-    
+    // In your Sales model
+public function payment()
+{
+    return $this->belongsTo(Payment::class); 
+}
+// In App\Models\Sales.php
+public function refunds()
+{
+    return $this->hasMany(Refund::class, 'sales_id'); // replace 'sales_id' with the actual foreign key in the Refund table
+}
+
+
 }

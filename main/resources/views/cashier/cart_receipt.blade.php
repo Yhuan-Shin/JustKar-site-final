@@ -40,6 +40,7 @@ table.products th {
 }
 table tr.items {
     background-color: rgb(241 245 249);
+    text-align: center
 }
 table tr.items td {
     padding: 0.5rem;
@@ -70,6 +71,13 @@ table tr.items td {
         <table class="w-full">
             <tr>
                 <td class="w-half">
+                    <h3 style="color: red">Invoice #: {{ $invoiceNo }}</h3>
+                    <h5 style="font-style: uppercase">Payment Method: {{$paymentMethod}} 
+                        <br>
+                    @if($paymentMethod == 'gcash' || $paymentMethod == 'bank'|| $paymentMethod == 'credit_card')
+                       Reference No: {{$refNo}}
+                    @endif
+                    </h5>
                     <div>This receipt is not official, for sales tracking only</div>
                     <div>Date: {{ date('d/m/Y') }}</div>
                 </td>
@@ -86,8 +94,9 @@ table tr.items td {
                 <th>Price</th>
                 <th>Total Price</th>
             </tr>
+            @foreach($sales as $item)
+
             <tr class="items">
-                @foreach($sales as $item)
                     <td>
                         {{ $item->product_name }}
                     </td>
@@ -98,21 +107,28 @@ table tr.items td {
                         {{ $item->quantity }}
                     </td>
                     <td>
-                        ₱{{ number_format($item->total_price, 2) }}
+                        <span style="font-family: DejaVu Sans; sans-serif;"> &#8369;</span>{{ number_format($item->total_price, 2) }}
                     </td>
                     <td>
-                        ₱{{ number_format($item->total_price, 2) }}
+                        <span style="font-family: DejaVu Sans; sans-serif;"> &#8369;</span>{{ number_format($item->total_price, 2) }}
                     </td>
-                @endforeach
             </tr>
+            @endforeach
+
         </table>
     </div>
  
     <div class="total">
         @php
-            $total = DB::table('order_items')->sum('total_price');
+           $total = DB::table('order_items')->sum('total_price');
+
         @endphp
-            Total: ₱{{ number_format($total, 2) }}
+        Total:<span style="font-family: DejaVu Sans; sans-serif;"> &#8369;</span>{{ number_format($total, 2) }} <br>
+        @if($paymentMethod == 'cash')
+        Amount Paid: <span style="font-family: DejaVu Sans, sans-serif;"> &#8369;</span>{{ number_format( $amountPaid, 2) }} <br>
+        <span style="font-family: DejaVu Sans; sans-serif;"> &#8369;</span>{{ number_format($amountPaid, 2) }} - <span style="font-family: DejaVu Sans; sans-serif;"> &#8369;</span>{{ number_format($total, 2) }} = <br>
+        Change:<span style="font-family: DejaVu Sans; sans-serif;"> &#8369;</span>{{ number_format($amountPaid - $total, 2) }}
+        @endif
     </div>
  
     <div class="footer margin-top">

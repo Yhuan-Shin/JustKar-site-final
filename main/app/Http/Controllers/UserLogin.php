@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\WhiteList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -22,17 +23,18 @@ class UserLogin extends Controller
             return redirect('/login')->with('error', 'Your IP is not whitelisted.');
         }
     
-       $user = User::where('username', $credentials['username'])->first();
-        
-    //    if(Auth::guard('admin')->check()){
-    //        return redirect('/login')->with('error', 'Simultaneously logged in device. Please logout first.');
+    $user = User::where('username', $credentials['username'])->first();
 
-    //    } else if(Auth::guard('cashier')->check()){
-    //        return redirect('/login')->with('error', 'Simultaneously logged in device. Please logout first.');
-    //    } 
-       if(Auth::id()){
-           return redirect('/login')->with('error', 'Simultaneously logged in device. Please logout first.');
+    if (!$user) {
+        return redirect('/login')->with('error', 'User does not exist.');
+    }
+        
+       $existingSession = DB::table('sessions')->where('user_id', $user->id)->first();
+
+       if ($existingSession && $existingSession->id !== session()->getId()) {
+           return redirect('/login')->with('error', 'Simultaneous login detected. Please log out from other devices.');
        }
+       
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
             return redirect('/login')->with('error', 'Invalid Credentials');
         }
@@ -71,7 +73,8 @@ public function logout(Request $request)
     Auth::logout();
     $request->session()->invalidate();
     $request->session()->regenerateToken();
-    return redirect()->route('user.login')->with('success', 'Logout Successful');
+    return redirect()->route('login')->with('success', 'Logout Successful');
+    
 }
 
 }

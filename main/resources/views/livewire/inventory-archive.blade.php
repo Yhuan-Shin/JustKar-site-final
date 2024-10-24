@@ -16,7 +16,7 @@
 
         <div class="row">
             <div class="col-md">
-                <input type="checkbox" wire:model="selectAll"> Select All
+                <input type="checkbox" class="form-check-input" wire:model="selectAll"> Select All
             </div>
             <div class="col-md mb-2">
                 <input type="text" wire:model="searchArchive" placeholder="Search product..." name="searchArchive" id="searchArchive" class="form-control">
@@ -41,7 +41,7 @@
         </div>
 
         <div class="row">
-            <div class="col">
+            <div class="col-md-12">
                 <div class="table-responsive">
                     <!-- table -->
                     <table class="table table-hover">
@@ -63,7 +63,7 @@
                             @forelse($inventoryArchived as $item)
                             <tr class="text-center">
                                 <th scope="row">
-                                    <input type="checkbox" wire:model="selectedItems" value="{{ $item->id }}"> 
+                                    <input type="checkbox" class="form-check-input" wire:model="selectedItems" value="{{ $item->id }}"> 
                                     {{ $item->product_code }}
                                 </th>
                                 <td class="text-uppercase">{{ $item->product_name }}</td>

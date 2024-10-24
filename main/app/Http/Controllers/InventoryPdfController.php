@@ -19,7 +19,16 @@ class InventoryPdfController extends Controller
             return redirect()->back();
         }
     
-        $pdf = PDF::loadView('admin/inventory_pdf', compact('inventories'));
+        $options = [
+            'defaultFont' => 'sans-serif', 
+            'isHtml5ParserEnabled' => true, 
+            'isRemoteEnabled' => true, 
+            'paper' => 'A4', 
+            'orientation' => 'landscape' 
+        ];
+        $pdf = PDF::loadView('admin/inventory_pdf', compact('inventories'))
+           ->setOptions($options)
+           ->setPaper('a4', 'landscape');
     
         return $pdf->download('inventory.pdf');
     }

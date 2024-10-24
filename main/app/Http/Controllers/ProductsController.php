@@ -19,14 +19,16 @@ class ProductsController extends Controller
     public function update(string $id ,Request $request){
         $request->validate([
             'product_image'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'price' => 'required|numeric',
         ]);
-        $inventory = Products::find($id);
-        $inventory->product_name = $request->input('product_name');
-        $inventory->size = $request->input('size');
-        $inventory->price = $request->input('price');
-        $inventory->description = $request->input('description');
+        $product = Products::find($id);
+        $product->product_name = $request->input('product_name');
+        $product->size = $request->input('size');
+        $product->price = $request->input('price');
+        $product->discount = $request->input('discount');
+        $product->description = $request->input('description');
         if($request->hasFile('product_image')){
-            $destination = 'uploads/product_images'.$inventory -> product_image;
+            $destination = 'uploads/product_images'.$product -> product_image;
             if(file_exists($destination)){
                 @unlink($destination);
             }
@@ -34,11 +36,26 @@ class ProductsController extends Controller
             $ext = $file->getClientOriginalExtension();
             $filename = time().'.'.$ext;
             $file->move('uploads/product_images', $filename);
-            $inventory->product_image = $filename;
+            $product->product_image = $filename;
         }
-        $inventory->save();
-        // refresh inventory
-        return redirect('admin/products');
+
+        $product->discount_price = $product->price - ($product->discount * 0.01 * $product->price);
+        
+
+        $existingProduct = Products::where('product_name', $product->product_name)
+        ->where('size', $product->size)
+        ->where('category', $product->category)
+        ->where('brand', $product->brand)
+        ->where('description', $product->description)
+        ->where('id', '!=', $product->id)
+        ->first();
+
+        if ($existingProduct) {
+            return redirect('admin/products')->with('error', 'Product already exists.');
+        }
+
+        $product->save();
+        return redirect('admin/products')->with('success', 'Product updated successfully.');
     }
     public function addToOrder(string $id ,Request $request){
         $cashierId = Auth::user()->id;        
@@ -63,10 +80,13 @@ class ProductsController extends Controller
             $orderItem->product_code = $product->product_code;
             $orderItem->product_name = $product->product_name;
             $orderItem->product_type = $product->product_type;
-            $orderItem->price = $product->price;
+            $orderItem->price = $product->discount_price;
             $orderItem->size = $product->size;
             $orderItem->brand = $product->brand;
             $orderItem->category = $product->category;
+            $orderItem->discount = $product->discount;
+            $orderItem->discount_price = $product->discount_price;
+            $orderItem->total_price = $product->discount_price;
             $orderItem->quantity = 1; // Default quantity
             $orderItem->save();
         }

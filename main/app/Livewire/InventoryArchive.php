@@ -40,7 +40,7 @@ class InventoryArchive extends Component
     public function unarchiveSelected()
     {
         if (empty($this->selectedItems)) {
-            session()->flash('error', 'No items selected. Please select items to archive.');
+            session()->flash('error', 'No items selected. Please select items to restore.');
 
             return;
         }

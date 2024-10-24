@@ -91,37 +91,5 @@ class CashierManagement extends Controller
         $user->save();
         return redirect('/admin/user_management')->with('success', 'Account restored!');
     }
-    public function login(Request $request){
-
-        $request->session()->regenerate();
-        $uniqueSessionId = Str::uuid()->toString();
-        $request->session()->put('unique_session_id', $uniqueSessionId);
-        
-        if (Auth::check() && Auth::user()->username == $request->username) {
-            return redirect('/cashier')->with('error', 'You are already logged in with this account.');
-        }
-        $credentials = Validator::make($request->all(), [
-            'username' => 'required|string|max:255',
-            'password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/'            
-        ]);
-        $archive = User::where('username', $request->username)->where('archive', 1)->exists();
-        if ($archive) {
-            return redirect('/cashier')->with('error', 'Your account is archived, please contact the admin.');
-        }
-        if($credentials->passes()){
-            if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){
-                return redirect('/cashier/pos') ->with('success', 'Login Successful');
-            }else{
-                return redirect('/cashier')->with('error', 'Invalid Credentials');   
-            }
-        }
-        else{
-            return redirect('/cashier')->with('error', 'Invalid Credentials');   
-        }
-    }
-    public function logout(){
-        Auth::logout();
-        request()->session()->flush();
-        return redirect('/cashier');
-    }
+   
 }

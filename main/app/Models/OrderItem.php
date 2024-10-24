@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class OrderItem extends Model
 {
     use HasFactory;
-
+    protected $table = 'order_items';
     public function product(): BelongsTo
     {
         return $this->belongsTo(Products::class, 'product_id', 'id');

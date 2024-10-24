@@ -31,6 +31,11 @@
             <i class="fs-4 bi bi-box-seam-fill" style="color:#DC3545"></i> <span class="ms-1 d-none d-sm-inline text-white">Inventory</span>
         </a>
     </li>
+    <li>                           
+        <a href="/admin/refund" class="nav-link px-0 align-middle">
+            <i class="fs-4 bi bi-arrow-counterclockwise" style="color:#DC3545"></i> <span class="ms-1 d-none d-sm-inline text-white">Refund</span>
+        </a>
+    </li>
     <li>
         <a data-bs-toggle="modal" data-bs-target="#logoutModal" class="nav-link px-0 align-middle col-md-12">
            <button class="btn btn-danger col-md-12 d-flex align-items-center">

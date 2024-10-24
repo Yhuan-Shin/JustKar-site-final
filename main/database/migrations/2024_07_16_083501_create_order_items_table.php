@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string('product_type');
             $table->string('quantity');
             $table->string('price');
+            $table->string('size');
+            $table->integer('total_price')->default();
+
             $table->foreign('product_id')->references('id')->on('products');
             $table->timestamps();
         });

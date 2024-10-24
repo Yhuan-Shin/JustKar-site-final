@@ -60,54 +60,8 @@
                         </div>
                     </div>
                 </div>
-                {{-- confirm checkout --}}
-                <div class="modal fade" id="confirmCheckoutModal" tabindex="-1" aria-labelledby="confirmCheckoutModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="confirmCheckoutModalLabel">Confirm Checkout</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <ul class="list-group">
-                                    @foreach($orderItems as $item)
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            <div>
-                                            <h6> {{ $item->product_name }} - {{$item->quantity}}</h6>
-                                                <small class="text-muted">{{ $item->size }}</small>
-                                            </div>
-                                            <span class="text-muted">₱{{ number_format($item->total_price,2) }}</span>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                                @php
-                                $total = DB::table('order_items')->sum('total_price');
-                                @endphp
-                                <p class="text-end mt-2">Total: ₱{{ number_format($total,2) }}</p>
-
-                                <hr>
-
-                                <h6 class="text-center">Enter Payment Amount</h6>
-
-                                <div class="input-group mb-3">
-                        
-                                    <span class="input-group-text">₱</span>
-                                    <form action="{{ route('order.checkout') }}" method="POST"> 
-                                        @csrf
-                                        @method('POST')
-                                    <input type="number" name="amount" wire:model="amount" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" style="appearance: textfield" required>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-primary">Checkout</button>
-                             </form>
-
-                            </div>
-                        </div>
-                    </div>
+                
                 </div>
-            </div>
               </li>
             </ul>
           </div>
@@ -119,6 +73,19 @@
                     <div class="row ">
                         <div class="col-md-8 ">
                             <div class="container">
+                                @if (session('success'))
+                                <div class="alert alert-success alert-dismissible fade show mt-3">
+                                    {{ session('success') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                @endif
+
+                                @if (session('error'))
+                                    <div class="alert alert-danger  alert-dismissible fade show mt-3" role="alert">
+                                        {{ session('error') }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                @endif
                                 @foreach($orderItems as $item)
                                     <div class="modal fade" id="modal-delete{{ $item->id }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -143,22 +110,7 @@
                                     </div>
                                 @endforeach
                                 {{-- @if (session('success')) --}}
-                                @if (session('success'))
-                                <div class="alert alert-success alert-dismissible fade show mt-3">
-                                    {{ session('success') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                                @endif
-                                
-
-
-
-                                @if (session('error'))
-                                    <div class="alert alert-danger  alert-dismissible fade show mt-3" role="alert">
-                                        {{ session('error') }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    </div>
-                                @endif
+                              
                                     
                                 {{-- display product --}}
                                 <div class="row mt-3">
